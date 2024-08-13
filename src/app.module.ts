@@ -4,6 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RequestsModule } from './requests/requests.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PipesModule } from './pipes/pipes.module';
+import { RequestEntity } from './types/typeORM/entities/request.entity';
 
 @Module({
   imports: [
@@ -18,10 +20,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: config.getOrThrow('DATABASE_USERNAME'),
         password: config.getOrThrow('DATABASE_PASSWORD'),
         database: config.getOrThrow('DATABASE_NAME'),
-        entities: [],
+        entities: [RequestEntity],
         synchronize: true,
       }),
     }),
+    PipesModule,
     RequestsModule,
   ],
   controllers: [AppController],
