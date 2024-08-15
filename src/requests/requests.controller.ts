@@ -14,7 +14,11 @@ import { RequestsService } from './requests.service';
 import { StrictValidationPipe } from 'src/pipes/strict.validation';
 import { TransformTypeORMSearchConditionsPipe } from 'src/pipes/transform.typeORM.search.conditions';
 import { FindManyOptions } from 'typeorm';
-import { CreateBody, GetQuery, UpdateBody } from './types/requests.controller';
+import {
+  CreatePayload,
+  GetQuery,
+  UpdatePayload,
+} from './types/requests.controller';
 import { StrictValidationTransformPipe } from 'src/pipes/strict.validation.transform';
 import { RequestEntity } from 'src/types/typeORM/entities/request.entity';
 
@@ -30,7 +34,7 @@ export class RequestsController {
     )
     query: FindManyOptions<RequestEntity>['where'],
   ) {
-    return this.service.get(query);
+    return this.service.get({ conditions: query });
   }
 
   @Get(':id')
@@ -41,14 +45,14 @@ export class RequestsController {
 
   @Post('new')
   @UsePipes(StrictValidationTransformPipe)
-  create(@Body() body: CreateBody) {
-    return this.service.create(body);
+  create(@Body() payload: CreatePayload) {
+    return this.service.create(payload);
   }
 
   @Patch('update/:id')
   @UsePipes(StrictValidationTransformPipe)
   @HttpCode(HttpStatus.NO_CONTENT)
-  update(@Body() body: UpdateBody, @Param('id') id: number) {
-    return this.service.update(id, body);
+  update(@Body() payload: UpdatePayload, @Param('id') id: number) {
+    return this.service.update({ id, payload });
   }
 }

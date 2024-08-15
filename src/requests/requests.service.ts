@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
-import { CreateBody } from './types/requests.controller';
+import { Repository } from 'typeorm';
 import { RequestEntity } from 'src/types/typeORM/entities/request.entity';
+import {
+  CreateArguments,
+  GetArguments,
+  UpdateArguments,
+} from './types/requests.service';
 
 @Injectable()
 export class RequestsService {
@@ -11,7 +15,7 @@ export class RequestsService {
     private requestRepository: Repository<RequestEntity>,
   ) {}
 
-  get(conditions?: FindManyOptions<RequestEntity>['where']) {
+  get({ conditions }: GetArguments = {}) {
     return this.requestRepository.find({
       where: conditions,
     });
@@ -20,11 +24,11 @@ export class RequestsService {
     return this.requestRepository.findOneBy({ id });
   }
 
-  create(payload: CreateBody) {
+  create(payload: CreateArguments) {
     return this.requestRepository.save(payload);
   }
 
-  update(id: RequestEntity['id'], payload: Partial<RequestEntity>) {
+  update({ id, payload }: UpdateArguments) {
     return this.requestRepository.update(id, payload);
   }
 }

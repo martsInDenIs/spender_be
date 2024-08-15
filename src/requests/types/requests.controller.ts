@@ -15,7 +15,7 @@ export class GetQuery implements Omit<RequestEntity, 'id'> {
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
-  @Type(() => Number) //?
+  @Type(() => Number)
   @IsInt({ each: true })
   id: number[];
 
@@ -51,7 +51,7 @@ export class GetQuery implements Omit<RequestEntity, 'id'> {
   executed: boolean;
 }
 
-export class CreateBody
+export class CreatePayload
   implements Pick<RequestEntity, 'description' | 'price'>
 {
   @IsNotEmpty()
@@ -63,7 +63,7 @@ export class CreateBody
   price: number;
 }
 
-export class UpdateBody implements Omit<RequestEntity, 'id'> {
+export class UpdatePayload implements Omit<RequestEntity, 'id'> {
   @IsOptional()
   @IsString()
   description: string;
