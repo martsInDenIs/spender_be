@@ -6,6 +6,8 @@ import { RequestsModule } from './requests/requests.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PipesModule } from './pipes/pipes.module';
 import { RequestEntity } from './types/typeORM/entities/request.entity';
+import { TransactionsModule } from './transactions/transactions.module';
+import { TransactionEntity } from './types/typeORM/entities/transaction.entity';
 
 @Module({
   imports: [
@@ -20,12 +22,13 @@ import { RequestEntity } from './types/typeORM/entities/request.entity';
         username: config.getOrThrow('DATABASE_USERNAME'),
         password: config.getOrThrow('DATABASE_PASSWORD'),
         database: config.getOrThrow('DATABASE_NAME'),
-        entities: [RequestEntity],
-        synchronize: true,
+        entities: [RequestEntity, TransactionEntity],
+        synchronize: !config.get('DATABASE_SYNC'),
       }),
     }),
     PipesModule,
     RequestsModule,
+    TransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConsoleLogger],
