@@ -23,7 +23,7 @@ import { TransactionEntity } from './types/typeORM/entities/transaction.entity';
         password: config.getOrThrow('DATABASE_PASSWORD'),
         database: config.getOrThrow('DATABASE_NAME'),
         entities: [RequestEntity, TransactionEntity],
-        synchronize: !config.get('DATABASE_SYNC'),
+        synchronize: !!config.get('DATABASE_SYNC'),
       }),
     }),
     PipesModule,
