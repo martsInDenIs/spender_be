@@ -1,23 +1,32 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { In, Like } from 'typeorm';
+import { FindManyOptions, In, Like } from 'typeorm';
 
 @Injectable()
-export class TransformTypeORMSearchConditionsPipe<T = Record<string, unknown>>
-  implements PipeTransform
-{
-  transform(value: T) {
+export class TransformTypeORMSearchConditionsPipe implements PipeTransform {
+  transform(value: Record<string, unknown>): FindManyOptions {
     return Object.entries(value).reduce((acc, [key, value]) => {
-      if (Array.isArray(value)) {
-        return { ...acc, [key]: In(value) };
-      }
-
-      if (typeof value === 'string') {
-        return { ...acc, [key]: Like(value) };
+      if (key === 'relations') {
+        return {
+          ...acc,
+          [key]: Array.isArray(value)
+            ? value.reduce(
+                (acc, relationName) => ({ ...acc, [relationName]: true }),
+                {},
+              )
+            : { [`${value}`]: true },
+        };
       }
 
       return {
         ...acc,
-        [key]: value,
+        where: {
+          ...acc['where'],
+          [key]: Array.isArray(value)
+            ? In(value)
+            : typeof value === 'string'
+              ? Like(value)
+              : value,
+        },
       };
     }, {});
   }
