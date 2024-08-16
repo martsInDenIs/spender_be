@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -15,7 +16,10 @@ export class TransactionEntity {
   @CreateDateColumn()
   date: Date;
 
-  @OneToOne(() => RequestEntity)
-  @JoinColumn()
+  @Column()
   requestId: number;
+
+  @OneToOne(() => RequestEntity)
+  @JoinColumn({ name: 'requestId' })
+  request: RequestEntity;
 }

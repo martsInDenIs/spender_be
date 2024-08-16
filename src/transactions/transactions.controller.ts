@@ -13,7 +13,7 @@ import { FindManyOptions } from 'typeorm';
 import { TransactionEntity } from 'src/types/typeORM/entities/transaction.entity';
 import { CreatePayload, GetQuery } from './types/transactions.controller';
 import { TransformTypeORMSearchConditionsPipe } from 'src/pipes/transform.typeORM.search.conditions';
-import { RequestTransactionService } from 'src/request_transaction/request_transaction.service';
+import { RequestTransactionService } from './request_transaction.service';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -28,9 +28,9 @@ export class TransactionsController {
       new StrictValidationTransformPipe(GetQuery),
       TransformTypeORMSearchConditionsPipe,
     )
-    conditions: FindManyOptions<TransactionEntity>['where'],
+    options: FindManyOptions<TransactionEntity>,
   ) {
-    return this.service.get({ conditions });
+    return this.service.get({ ...options });
   }
 
   @Get(':id')

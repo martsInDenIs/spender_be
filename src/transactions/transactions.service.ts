@@ -12,9 +12,10 @@ export class TransactionsService {
     private transactionRepository: Repository<TransactionEntity>,
   ) {}
 
-  get({ conditions }: GetArguments) {
+  async get({ where, relations }: GetArguments) {
     return this.transactionRepository.find({
-      where: conditions,
+      where,
+      relations,
     });
   }
 
