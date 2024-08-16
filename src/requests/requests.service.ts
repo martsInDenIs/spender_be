@@ -15,9 +15,9 @@ export class RequestsService {
     private requestRepository: Repository<RequestEntity>,
   ) {}
 
-  get({ conditions }: GetArguments = {}) {
+  get(conditions: GetArguments = {}) {
     return this.requestRepository.find({
-      where: conditions,
+      ...conditions,
     });
   }
   getById(id: RequestEntity['id']) {

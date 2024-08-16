@@ -32,9 +32,9 @@ export class RequestsController {
       new StrictValidationPipe(GetQuery),
       TransformTypeORMSearchConditionsPipe,
     )
-    query: FindManyOptions<RequestEntity>['where'],
+    query: FindManyOptions<RequestEntity>,
   ) {
-    return this.service.get({ conditions: query });
+    return this.service.get({ ...query });
   }
 
   @Get(':id')
