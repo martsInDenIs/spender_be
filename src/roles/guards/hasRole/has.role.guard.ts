@@ -3,13 +3,15 @@ import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { NoRole } from './has.role.metadata';
-import { RolesService } from 'src/roles/roles.service';
+import { RolesService } from 'src/roles/services/roles.service';
 import { ROLE_COOKIE_KEY } from 'src/roles/roles.constants';
+import { CodeRolesService } from 'src/roles/services/code.roles.service';
 
 @Injectable()
 export class HasRoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
+    private codeRoleService: CodeRolesService,
     private service: RolesService,
   ) {}
 
@@ -29,7 +31,9 @@ export class HasRoleGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>();
 
-    const role = request.cookies?.[ROLE_COOKIE_KEY];
+    const { role } = this.codeRoleService.verifyToken(
+      request.cookies?.[ROLE_COOKIE_KEY],
+    );
 
     if (!role || !roleList.includes(role)) {
       return false;

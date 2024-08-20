@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ROLES_ENUM } from './roles.constants';
+import { ROLES_ENUM } from '../roles.constants';
 
 @Injectable()
 export class RolesService {
